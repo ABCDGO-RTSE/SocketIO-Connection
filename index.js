@@ -4,6 +4,11 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 require('dotenv').config()
+const bodyParser = require("body-parser");
+
+//Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const io = new Server(server, {
     cors: {
@@ -43,3 +48,12 @@ setInterval(() => {
     i++;
     io.emit("tick", i);
 }, 1000);
+
+
+// ? POST data from api
+app.post('/send_data', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(req.body));
+
+    io.emit('receive_data', req.body.data)
+});
