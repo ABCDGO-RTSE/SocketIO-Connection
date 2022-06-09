@@ -3,19 +3,24 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+require('dotenv').config()
+
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.ORIGIN_URL,
         credentials: true
     }
 });
 
-require('dotenv').config()
 
 const PORT = process.env.PORT || 4000
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/check', (req, res) => {
+    res.send(process.env.ORIGIN_URL)
 });
 
 server.listen(PORT, () => {
