@@ -60,4 +60,5 @@ app.post('/send_data', (req, res) => {
     res.status(200).end(JSON.stringify(req.body));
 
     io.emit('receive_data', req.body.data)
+    io.emit('receive_threshold', req.body.threshold)
 });
