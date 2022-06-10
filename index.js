@@ -74,13 +74,13 @@ app.post('/send_data', (req, res) => {
 
     data = req.body.data;
     color = req.body.motor;
-    threshold = req.body.threshold;
+    threshold = parseInt(req.body.threshold);
 
 });
 
 app.post('/set_threshold', (req, res) => {
 
-    threshold = req.body.threshold;
+    threshold = parseInt(req.body.threshold);
     res.status(200).end(JSON.stringify(req.body));
 })
 
