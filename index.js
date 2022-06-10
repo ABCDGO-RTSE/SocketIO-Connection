@@ -50,12 +50,11 @@ setInterval(() => {
 }, 1000);
 
 
-// ? POST data from api
 app.get('/send_data', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(req.body));
+    res.send(JSON.stringify(req.body))
 })
 
+// ? POST data from api
 app.post('/send_data', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(req.body));
