@@ -58,15 +58,6 @@ setInterval(() => {
 var data = 0;
 var color = "";
 
-app.get('/get_data', (req, res) => {
-    let arr = [];
-    arr['data'] = data;
-    arr['color'] = color;
-    
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).end(JSON.stringify(arr))
-})
-
 app.get('/send_data', (req, res) => {
     res.send(JSON.stringify(req.body))
 })
@@ -97,6 +88,15 @@ app.get('/get_threshold', (req, res) => {
 
     res.status(200).end(JSON.stringify(threshold))
 
+})
+
+app.get('/get_data', (req, res) => {
+    let arr = [];
+    arr['data'] = data;
+    arr['color'] = color;
+    
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).end(JSON.stringify(arr))
 })
 
 io.emit('threshold', threshold);
