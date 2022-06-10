@@ -56,7 +56,8 @@ setInterval(() => {
 }, 1000);
 
 var data = 0;
-var color = "";
+var color = "green";
+var threshold = 0;
 
 app.get('/send_data', (req, res) => {
     res.send(JSON.stringify(req.body))
@@ -73,10 +74,9 @@ app.post('/send_data', (req, res) => {
 
     data = req.body.data;
     color = req.body.motor;
+    threshold = req.body.threshold;
 
 });
-
-var threshold = 5;
 
 app.post('/set_threshold', (req, res) => {
 
@@ -92,7 +92,7 @@ app.get('/get_threshold', (req, res) => {
 
 app.get('/get_data', (req, res) => {
 
-    let arr = { data: data, color: color };
+    let arr = { data: data, color: color, threshold: threshold };
 
     res.setHeader('Content-Type', 'application/json');
     res.status(200).end(JSON.stringify(arr))
