@@ -55,6 +55,17 @@ setInterval(() => {
     io.emit("tick", i);
 }, 1000);
 
+var data = 0;
+var color = "";
+
+app.get('/get_data', (req, res) => {
+    let arr = [];
+    arr['data'] = data;
+    arr['color'] = color;
+    
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).end(JSON.stringify(arr))
+})
 
 app.get('/send_data', (req, res) => {
     res.send(JSON.stringify(req.body))
@@ -69,20 +80,23 @@ app.post('/send_data', (req, res) => {
     io.emit('receive_threshold', req.body.threshold)
     io.emit('motor_stat', req.body.motor)
 
+    data = req.body.data;
+    color = req.body.motor;
+
 });
 
 var threshold = 5;
 
 app.post('/set_threshold', (req, res) => {
-    
+
     threshold = req.body.threshold;
     res.status(200).end(JSON.stringify(req.body));
 })
 
 app.get('/get_threshold', (req, res) => {
-    
+
     res.status(200).end(JSON.stringify(threshold))
-    
+
 })
 
 io.emit('threshold', threshold);
