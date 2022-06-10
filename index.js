@@ -10,6 +10,12 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 const io = new Server(server, {
     cors: {
         origin: process.env.ORIGIN_URL,
@@ -61,4 +67,22 @@ app.post('/send_data', (req, res) => {
 
     io.emit('receive_data', req.body.data)
     io.emit('receive_threshold', req.body.threshold)
+    io.emit('motor_stat', req.body.motor)
+
 });
+
+var threshold = 5;
+
+app.post('/set_threshold', (req, res) => {
+    
+    threshold = req.body.threshold;
+    res.status(200).end(JSON.stringify(req.body));
+})
+
+app.get('/get_threshold', (req, res) => {
+    
+    res.status(200).end(JSON.stringify(threshold))
+    
+})
+
+io.emit('threshold', threshold);
