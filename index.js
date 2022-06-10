@@ -91,10 +91,9 @@ app.get('/get_threshold', (req, res) => {
 })
 
 app.get('/get_data', (req, res) => {
-    let arr = [];
-    arr['data'] = data;
-    arr['color'] = color;
-    
+
+    let arr = { data: data, color: color };
+
     res.setHeader('Content-Type', 'application/json');
     res.status(200).end(JSON.stringify(arr))
 })
