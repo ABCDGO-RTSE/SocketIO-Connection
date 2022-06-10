@@ -57,7 +57,7 @@ app.get('/send_data', (req, res) => {
 // ? POST data from api
 app.post('/send_data', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(req.body));
+    res.status(200).end(JSON.stringify(req.body));
 
     io.emit('receive_data', req.body.data)
 });
