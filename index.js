@@ -57,7 +57,7 @@ setInterval(() => {
 
 var data = 0;
 var color = "green";
-var threshold = 0;
+var threshold = 1;
 
 app.get('/send_data', (req, res) => {
     res.send(JSON.stringify(req.body))
