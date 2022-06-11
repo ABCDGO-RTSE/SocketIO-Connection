@@ -111,6 +111,12 @@ app.post('/set_threshold', (req, res) => {
 app.get('/get_threshold', (req, res) => {
 
     get_threshold();
+    res.status(200).end(JSON.stringify(threshold));
+
+})
+
+app.get('/logs', (req, res) => {
+
     res.status(200).end(JSON.stringify(logs));
 
 })
