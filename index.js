@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 require('dotenv').config()
 const bodyParser = require("body-parser");
 var firebase = require('firebase');
+var sem = require('semaphore')(1);
 
 var firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -99,13 +100,17 @@ app.post('/send_data', (req, res) => {
 
 app.post('/set_threshold', (req, res) => {
 
-    threshold = parseInt(req.body.threshold);
+    sem.take(function () {
+        threshold = parseInt(req.body.threshold);
 
-    set_threshold(threshold);
+        set_threshold(threshold);
 
-    logs.push(threshold);
+        logs.push(threshold);
 
-    res.status(200).end(JSON.stringify(req.body));
+        res.status(200).end(JSON.stringify(req.body));
+        sem.leave();
+    });
+
 })
 
 app.get('/get_threshold', (req, res) => {
