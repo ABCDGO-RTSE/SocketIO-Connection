@@ -102,6 +102,8 @@ app.post('/set_threshold', (req, res) => {
 
     let operator = "";
 
+    console.log(threshold);
+
     sem.take(function () {
         operator = req.body.threshold;
 
