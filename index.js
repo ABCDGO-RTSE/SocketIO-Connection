@@ -100,8 +100,20 @@ app.post('/send_data', (req, res) => {
 
 app.post('/set_threshold', (req, res) => {
 
+    let operator = "";
+
     sem.take(function () {
-        threshold = parseInt(req.body.threshold);
+        operator = parseInt(req.body.threshold);
+
+        if (operator == "plus") {
+            if (threshold < 100) { 
+                threshold++;
+            }
+        } else {
+            if (threshold > 0) { 
+                threshold--;
+            }
+        }
 
         set_threshold(threshold);
 
