@@ -74,6 +74,7 @@ setInterval(() => {
 var data = 0;
 var color = "green";
 var threshold = 1;
+let logs = [];
 
 get_threshold();
 
@@ -102,13 +103,15 @@ app.post('/set_threshold', (req, res) => {
 
     set_threshold(threshold);
 
+    logs.push(threshold);
+
     res.status(200).end(JSON.stringify(req.body));
 })
 
 app.get('/get_threshold', (req, res) => {
 
     get_threshold();
-    res.status(200).end(JSON.stringify(threshold));
+    res.status(200).end(JSON.stringify(logs));
 
 })
 
