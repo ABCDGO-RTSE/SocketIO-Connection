@@ -104,28 +104,28 @@ app.post('/set_threshold', (req, res) => {
 
     console.log(threshold);
 
-    // sem.take(function () {
-    operator = req.body.threshold;
+    sem.take(function () {
+        operator = req.body.threshold;
 
-    console.log(operator);
+        console.log(operator);
 
-    if (operator == "plus") {
-        if (threshold < 100) {
-            threshold++;
+        if (operator == "plus") {
+            if (threshold < 100) {
+                threshold++;
+            }
+        } else {
+            if (threshold > 0) {
+                threshold--;
+            }
         }
-    } else {
-        if (threshold > 0) {
-            threshold--;
-        }
-    }
 
-    set_threshold(threshold);
+        set_threshold(threshold);
 
-    logs.push(threshold);
+        logs.push(threshold);
 
-    res.status(200).end(JSON.stringify(req.body));
-    // sem.leave();
-    // });
+        res.status(200).end(JSON.stringify(req.body));
+        sem.leave();
+    });
 
 })
 
