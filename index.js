@@ -103,7 +103,9 @@ app.post('/set_threshold', (req, res) => {
     let operator = "";
 
     sem.take(function () {
-        operator = parseInt(req.body.threshold);
+        operator = req.body.threshold;
+
+        console.log(operator);
 
         if (operator == "plus") {
             if (threshold < 100) { 
