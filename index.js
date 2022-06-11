@@ -5,6 +5,22 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 require('dotenv').config()
 const bodyParser = require("body-parser");
+var firebase = require('firebase');
+
+var firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: "rtse-smms.firebaseapp.com",
+    projectId: "rtse-smms",
+    storageBucket: "rtse-smms.appspot.com",
+    messagingSenderId: "850598274220",
+    appId: "1:850598274220:web:24fb52aaadc86f5bc9eb09",
+    measurementId: "G-4TP5NQGESD",
+    databaseURL: "https://rtse-smms-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+let rtdb = firebase.database();
 
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,6 +75,8 @@ var data = 0;
 var color = "green";
 var threshold = 1;
 
+get_threshold();
+
 app.get('/send_data', (req, res) => {
     res.send(JSON.stringify(req.body))
 })
@@ -69,7 +87,7 @@ app.post('/send_data', (req, res) => {
     res.status(200).end(JSON.stringify(req.body));
 
     io.emit('receive_data', req.body.data)
-    io.emit('receive_threshold', req.body.threshold)
+    io.emit('threshold', req.body.threshold)
     io.emit('motor_stat', req.body.motor)
 
     data = req.body.data;
@@ -81,12 +99,16 @@ app.post('/send_data', (req, res) => {
 app.post('/set_threshold', (req, res) => {
 
     threshold = parseInt(req.body.threshold);
+
+    set_threshold(threshold);
+
     res.status(200).end(JSON.stringify(req.body));
 })
 
 app.get('/get_threshold', (req, res) => {
 
-    res.status(200).end(JSON.stringify(threshold))
+    get_threshold();
+    res.status(200).end(JSON.stringify(threshold));
 
 })
 
@@ -99,3 +121,16 @@ app.get('/get_data', (req, res) => {
 })
 
 io.emit('threshold', threshold);
+
+// ? database function
+function set_threshold(threshold) {
+    rtdb.ref('rtse').set({
+        threshold: threshold
+    });
+}
+
+function get_threshold() {
+    rtdb.ref("rtse/threshold").on("value", (snapshot) => {
+        threshold = snapshot.val();
+    })
+}
